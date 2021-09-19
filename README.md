@@ -15,6 +15,8 @@ Running dvwa on aws based on the work of
 2. If you don't have a default VPN in region eu-west-1, create a default vpc in the region eu-west-1 using the shell 
 https://eu-west-1.console.aws.amazon.com/cloudshell/home?region=eu-west-1# 
 aws ec2 create-default-vpc
+
+Alternative import it directly: terraform import aws_default_vpc.default vpc-01234567
 3. Execute `terraform init`
 4. Execute `terraform apply`
 
