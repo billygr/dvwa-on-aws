@@ -12,3 +12,11 @@ create user dvwa@localhost identified by 'p@ssw0rd';
 grant all on dvwa.* to dvwa@localhost;
 flush privileges;
 EOF
+
+cd /var/www/html
+sudo rm /var/www/html/index.html
+sudo git clone https://github.com/digininja/DVWA.git .
+sudo cp config/config.inc.php.dist config/config.inc.php
+sudo chown www-data:www-data /var/www/html/hackable/uploads/
+sudo chown www-data:www-data /var/www/html/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt
+sudo chown www-data:www-data /var/www/html/config
