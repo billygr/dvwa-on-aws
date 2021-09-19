@@ -1,44 +1,29 @@
-resource "aws_security_group" "allow_connections_hacking_lab" {
-  name        = "allow_connections_hacking_lab"
-  description = "Allow TLS inbound traffic for ssh but only for host PCs external IP. Created with terraform for the hacking lab"
+resource "aws_default_vpc" "default" {}
 
+resource "aws_security_group" "allow_connections_to_from_dvwa" {
+  name        = "allow_connections_to_from_dvwa"
+  description = "Allow TLS inbound traffic for ssh but only for host PCs external IP. Created with terraform for the hacking lab"
+  vpc_id      = aws_default_vpc.default.id
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = concat(formatlist("%s/32", list(chomp(data.http.external_ip.body))), var.ip_whitelist)
+    cidr_blocks = concat(var.ip_whitelist,
+                        formatlist("%s/32", chomp(data.http.external_ip.body))
+                        )
   }
-  /* Hackazon */
+  /* DVWA */
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = concat(formatlist("%s/32", list(chomp(data.http.external_ip.body))), var.ip_whitelist)
-  }
-  /* DVWA */
-  ingress {
-    from_port   = 81
-    to_port     = 81
-    protocol    = "tcp"
-    cidr_blocks = concat(formatlist("%s/32", list(chomp(data.http.external_ip.body))), var.ip_whitelist)
-  }
-  /* Juice Shop */
-  ingress {
-    from_port   = 82
-    to_port     = 82
-    protocol    = "tcp"
-    cidr_blocks = concat(formatlist("%s/32", list(chomp(data.http.external_ip.body))), var.ip_whitelist)
-  }
-  /* Shellshock */
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = concat(formatlist("%s/32", list(chomp(data.http.external_ip.body))), var.ip_whitelist)
+    cidr_blocks = concat(var.ip_whitelist,
+                        formatlist("%s/32", chomp(data.http.external_ip.body))
+                        )
   }
   tags = {
-    Name = "allow_connections_hacking_lab"
+    Name = "allow_connections_to_from_dvwa"
   }
   egress {
     from_port   = 80
