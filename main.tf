@@ -49,5 +49,9 @@ resource "aws_instance" "dvwa-server" {
   provisioner "local-exec" {
     command = "echo ssh -i '${var.ssh_key_name}.pem' ubuntu@${aws_instance.dvwa-server.public_ip}"
   }
+
+  provisioner "local-exec" {
+    command = "echo Connect in 2-3 minutes to http://${aws_instance.dvwa-server.public_ip}"
+  }
 }
 
